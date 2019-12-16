@@ -9,6 +9,21 @@
 </head>
 <body>
 <div id="App">
+    <div id="templates" class="cut">
+        <!--CALENDAR DAY-->
+        <div class="calendar__day calendar__day-active day-item"
+             data-entity="calendarDay">
+            <div class="day-item__date">{{ date }}</div>
+            <div class="day-item__title">{{ title }}</div>
+            <div class="day-item__member">{{ member }}</div>
+        </div>
+
+        <!-- item search -->
+        <div class="item-search" data-entity="itemSearch">
+            <div class="item-search__title">{{ title }}</div>
+            <div class="item-search__date">{{ date }}</div>
+        </div>
+    </div>
     <div class="gray-bg">
         <div class="container">
             <header class="header">
@@ -97,8 +112,21 @@
             <button class="navigation__next"></button>
             <div class="navigation__tooltip">Сегодня</div>
         </nav>
-        <div class="calendar">
-
+        <div class="calendar" data-id="calendar">
+            <div class="calendar__week">
+                <!--Date item-->
+                <div class="calendar__day day-item">
+                    <div class="day-item__date">1</div>
+                    <div class="day-item__title"></div>
+                    <div class="day-item__member"></div>
+                </div>
+                <!--Date item-->
+                <div class="calendar__day calendar__day-active day-item">
+                    <div class="day-item__date">2</div>
+                    <div class="day-item__title">Напиться!</div>
+                    <div class="day-item__member">Витя костин, Петр Михайлов</div>
+                </div>
+            </div>
         </div>
     </main>
 

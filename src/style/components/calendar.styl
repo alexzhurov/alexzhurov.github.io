@@ -1,0 +1,52 @@
+.calendar, .calendar__day {
+  border-style: solid
+  border-color: grayAccent
+}
+
+.calendar {
+  display: flex;
+  border-width: 1px 0 0 1px
+  flex-direction: row;
+  //width: 100%
+  flex-wrap: wrap;
+
+  &__week {
+    //flex-grow: 1
+    display: flex;
+    width: 100%
+  }
+
+  .calendar__day {
+    flex: 1 0
+    height: 119px
+    border-width: 0 1px 1px 0;
+    /*
+    &:hover {
+      transition: background-color .15s
+    }
+    */
+
+    &-active {
+      background-color: skyDark;
+    }
+  }
+}
+
+.day-item {
+  padding: 8px
+  box-sizing: border-box;
+  min-width: 0;
+
+  &__date {
+    color: grayAccent;
+    margin-bottom: 10px
+  }
+
+  &__title {
+    font-size: 14px
+  }
+
+  &__member {
+    font-size: 12px
+  }
+}
