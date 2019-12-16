@@ -9,7 +9,7 @@ export default class Renderer {
         const tmp = document.createElement('div');
         tmp.appendChild(node);
         return tmp.innerHTML.trim();
-    };
+    }
 
     /**
      * Creates a node with provided data
