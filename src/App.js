@@ -1,14 +1,11 @@
 import './style/index.styl';
 import Spider from './modules/Spider';
 import Renderer from './modules/Renderer';
-import {getWeekDayName} from './modules/Utils/getWeekDayName';
-import {daysEqual} from './modules/Utils/daysEqual';
+import { getWeekDayName } from './modules/Utils/getWeekDayName';
+import { daysEqual } from './modules/Utils/daysEqual';
+import { truncateText } from './modules/Utils/truncateText';
+import { getNotesByMonth } from './modules/Calendart/getNotesByMonth';
 
-
-/**
- * @type {calendarDay[]}
- */
-import dates from './mock';
 
 /**
  * calendarDay
@@ -21,24 +18,21 @@ import dates from './mock';
 
 /**
  * @property {Node} templates - root element with templates
+ * @property {Node} calendar - element of the calendar container
  */
-class NodeGenerator extends Spider {
+export class App extends Spider {
     constructor() {
         super();
         const templates = document.getElementById('templates');
         this.templates = templates.cloneNode(true);
         templates.parentNode.removeChild(templates);
+        this.calendar = document.querySelector(`[data-id='calendar']`);
         this.beforeMount();
     }
 
     beforeMount() {
-        const searchTemplate = this.getEntityTemplate('itemSearch');
-        dates.sort((a, b) => {
-            if (a.date < b.date) return -1;
-            if (a.date > b.date) return 1;
-            return 0;
-        });
         this.createCalendar();
+        this.bindEvents();
     }
 
     createCalendar() {
@@ -46,12 +40,10 @@ class NodeGenerator extends Spider {
         const year = 2019;
 
         const {days, startDate} = this.getCalendarOptions(month, year);
-        const notes = this.getNotesByMonth(month, year);
+        const notes = getNotesByMonth(month, year);
 
         const dayTemplate = this.getEntityTemplate('calendarDay');
-
-        const container = document.querySelector(`[data-id='calendar']`);
-        container.innerHTML = '';
+        this.calendar.innerHTML = '';
 
         let week;
         let weekIndex = 0;
@@ -59,7 +51,7 @@ class NodeGenerator extends Spider {
             const date = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i);
             if (i % 7 === 0) {
                 weekIndex++;
-                week && container.appendChild(week);
+                week && this.calendar.appendChild(week);
                 week = document.createElement('div');
                 week.classList.add('calendar__week');
             }
@@ -67,9 +59,9 @@ class NodeGenerator extends Spider {
 
             let filledTemplate = Renderer.getFilledTemplate(dayTemplate, {
                 date: (weekIndex === 1 && getWeekDayName(date) + ', ') + date.getDate(),
-                title: note && note.title || '',
-                member: note && note.member || '',
-                desc: note && note.desc || '',
+                title: note && truncateText(note.title, 30) || '',
+                member: note && truncateText(note.member, 45) || '',
+                // desc: note && note.desc || '',
             });
             if (note) {
                 const c = 'calendar__day';
@@ -79,6 +71,11 @@ class NodeGenerator extends Spider {
         }
     }
 
+    bindEvents(){
+        this.calendar.addEventListener('click', (Event) => {
+            console.log(Event.target.closest('[data-entity="calendarDay"]'))
+        });
+    }
     /**
      * @param {number} month
      * @param {number} year
@@ -108,22 +105,5 @@ class NodeGenerator extends Spider {
     getEntityTemplate(entity) {
         return this.templates.querySelector(`[data-entity=${entity}]`);
     }
-
-    /**
-     * @param {number} month
-     * @param {number} year
-     * @return {calendarDay[]}
-     */
-    getNotesByMonth(month, year) {
-        const notes = [];
-        dates.forEach((day) => {
-            const date = new Date(day.date * 1000);
-            if (month === date.getMonth() && year === date.getFullYear()) {
-                notes.push(day);
-            }
-        });
-        return notes;
-    }
 }
 
-new NodeGenerator();
