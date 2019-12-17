@@ -1,0 +1,131 @@
+.search {
+  display: flex;
+  margin-right: 15px
+
+  &__icon {
+    fill: grayAccent
+    width: 21px
+    box-sizing: border-box;
+    padding: 4px
+    max-height: 25px
+    margin-right: 7px
+  }
+
+  &__container {
+    display: none;
+    width: calc(240px - 25px);
+    margin-left: auto;
+    position: absolute;
+    top: 100%
+    right: 0
+    max-height: 400px
+    margin-top: 15px
+    padding: 4px 7px 4px 4px
+    box-sizing: border-box;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    background-color: whiteBase;
+
+    &-active {
+      display: flex;
+    }
+  }
+
+  &__list {
+    width: 100%
+    height: 100%;
+
+    flex-grow: 1
+    overflow-y: scroll;
+
+    box-sizing: border-box;
+    border-radius: 1px;
+    ////////////////////////////////
+
+
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    &::-webkit-scrollbar-button {
+      width: 4px
+    }
+
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: #7a7a7a;
+    }
+
+    ////////////////////////////////
+
+    &::before {
+      triangle();
+    }
+  }
+}
+
+.item-search {
+  display: flex;
+  flex-direction: column;
+  min-height: 40px
+  max-height: 40px
+  justify-content: space-around
+  position: relative;
+  padding-right: 5px
+  padding-left: 8px
+  transition: color .05s, background-color .15s
+  cursor: pointer;
+  margin-right: 7px
+
+  &:not(:last-child) {
+    margin-bottom: 7px
+    // horizontal line
+
+    &:before {
+      width: calc(100% - 5px)
+      bottom: -4px
+      left: 5px
+      border-bottom: 1px solid #000;
+      content: "";
+      display: inline-block;
+      position: absolute;
+    }
+  }
+
+  // Opacity mask
+
+  &:after {
+    content: ''
+    position: absolute;
+    top: 0
+    right: 0
+    width: 35px;
+    height: 100%
+    background: linear-gradient(to right, rgba(#fff, 0), rgba(#fff, 1));
+  }
+
+  &:hover {
+    background-color: blueLight;
+    color: whiteBase;
+
+    .item-search__date {
+      color: whiteBase;
+    }
+
+    &:after {
+      display: none;
+    }
+  }
+
+  &__title {
+    font-weight: bold;
+    font-size: 14px
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &__date {
+    font-size: 12px
+    color: grayAccent
+  }
+}

@@ -11,3 +11,20 @@ text-ellipsis() {
   margin: -1px;
   clip: rect(0 0 0 0);
 }
+
+triangle() {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  z-index: 10
+  border-color: #fff #fff transparent transparent;
+  border-width: 6px
+  left: 23px
+  top: -4px
+  box-shadow: 1px -1px #ccc;
+  transform: rotate(-45deg);
+  pointer-events: none
+}
