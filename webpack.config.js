@@ -14,12 +14,7 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['@babel/preset-env']
-                    },
-                },
+                use: ['babel-loader'],
                 exclude: /node_modules/
             },
             {
@@ -42,13 +37,14 @@ module.exports = {
         ],
     },
     plugins: [
-        new webpack.LoaderOptionsPlugin({
-            options: {
-                stylus: {
-                    use: [poststylus(['autoprefixer'])]
-                }
-            }
-        }),
+
+        // new webpack.LoaderOptionsPlugin({
+        //     options: {
+        //         stylus: {
+        //             use: [poststylus(['autoprefixer'])]
+        //         }
+        //     }
+        // }),
         new webpack.SourceMapDevToolPlugin({exclude: ['/node_modules/']}),
     ],
     devServer: {
