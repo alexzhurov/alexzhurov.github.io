@@ -71,11 +71,12 @@ export class App extends Spider {
         }
     }
 
-    bindEvents(){
+    bindEvents() {
         this.calendar.addEventListener('click', (Event) => {
             console.log(Event.target.closest('[data-entity="calendarDay"]'))
         });
     }
+
     /**
      * @param {number} month
      * @param {number} year
@@ -95,15 +96,6 @@ export class App extends Spider {
             days: weeks * 7,
             startDate: new Date(startDate.getTime())
         };
-    }
-
-    /**
-     *
-     * @param {string} entity - data-entity attribute of the template
-     * @return {HTMLElement}
-     */
-    getEntityTemplate(entity) {
-        return this.templates.querySelector(`[data-entity=${entity}]`);
     }
 }
 
