@@ -19,10 +19,10 @@ export default class Renderer {
      */
     static getFilledTemplate(template, data) {
         let nodeString = this.getNodeString(template);
-        let rxp = /{{2}([^}]+)}}/g; // regex {{ variable }}
+        let rxp = /{{([^}]+)}}/g; // regex {{ variable }}
         let curMatch;
 
-        while (curMatch = rxp.exec(nodeString)) {
+        while ((curMatch = rxp.exec(nodeString)) !== null) {
             const target = curMatch[0];
             const dataVar = curMatch[1].trim();
             const state = data[dataVar];
