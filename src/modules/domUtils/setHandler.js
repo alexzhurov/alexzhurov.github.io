@@ -1,6 +1,7 @@
 const events = {
     onclick: 'click',
-    oninput: 'input'
+    oninput: 'input',
+    onkeypress: "keypress"
 };
 
 /**
@@ -19,4 +20,4 @@ export function setHandler(child) {
             child.addEventListener(ev, this[handler]);
         }
     }
-};
+}
