@@ -2,8 +2,8 @@ import { Control }        from '../../modules/Control';
 import { getMonthNumber } from '../../modules/utils/getMonthNumber';
 
 export class FastEvent extends Control {
-    constructor() {
-        super();
+    constructor(o) {
+        super(o);
         this.state = {
             message: '',
             date: null
@@ -19,7 +19,7 @@ export class FastEvent extends Control {
      * @param {Event} e
      */
     create(e) {
-
+        e.preventDefault();
     }
 
     decodeMessage() {
@@ -40,6 +40,8 @@ export class FastEvent extends Control {
      * @param {Event} e
      */
     close(e) {
+        e.preventDefault();
+
         this.el.remove();
     }
 
@@ -48,10 +50,12 @@ export class FastEvent extends Control {
      * @param{InputEvent} e
      */
     input(e) {
+        e.preventDefault();
+
         this.state = {
             ...this.state,
             message: e.target.value
-        }
+        };
     }
 
     /**
@@ -60,7 +64,8 @@ export class FastEvent extends Control {
      */
     keydown(e) {
         if (e.key === 'Enter') {
-            this.close()
+            e.preventDefault();
+            this.close();
         }
     }
 
