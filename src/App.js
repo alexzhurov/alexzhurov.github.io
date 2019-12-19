@@ -1,49 +1,51 @@
 import './style/index.styl';
-import Spider from './modules/Spider';
-import Renderer from './modules/Renderer';
-import { getWeekDayName } from './modules/Utils/getWeekDayName';
-import { daysEqual } from './modules/Utils/daysEqual';
-import { truncateText } from './modules/Utils/truncateText';
-import { getNotesByMonth } from './modules/Calendart/getNotesByMonth';
+import { getNodeByString, removeChilds } from './modules/domUtils';
+import Spider                            from './modules/Spider';
 
+import { getWeekDayName }  from './modules/utils/getWeekDayName';
+import { daysEqual }       from './modules/utils/daysEqual';
+import { truncateText }    from './modules/utils/truncateText';
+import { getMonthName }    from './modules/utils/getMonthName';
 
-/**
- * calendarDay
- * @typedef {Object} calendarDay
- * @property {string} title
- * @property {number} date
- * @property {string} member
- * @property {string} desc
- */
+import { calendarDayFC }   from './components/calendarDay';
+import { FastEvent }       from './components/fastEvent';
+import { SearchComponent } from './components/search';
 
 /**
- * @property {Node} templates - root element with templates
- * @property {Node} calendar - element of the calendar container
+ * @property {Date} selectedDate
+ * @property {Object.<string, HTMLElement>} entries
+ * @property {HTMLElement} calendar - element of the calendar container
  */
 export class App extends Spider {
     constructor() {
         super();
-        const templates = document.getElementById('templates');
-        this.templates = templates.cloneNode(true);
-        templates.parentNode.removeChild(templates);
-        this.calendar = document.querySelector(`[data-id='calendar']`);
+        this.rootNode = document.getElementById('App');
+
         this.beforeMount();
     }
 
     beforeMount() {
-        this.createCalendar();
+        this.getEntries();
+        this.childrens = {
+            fastEvent: new FastEvent(),
+            searchComponent: new SearchComponent(this.entries.header)
+        };
         this.bindEvents();
+        this.selectedDate = (new Date()).setDate(1);
+
+        this.renderDate();
+        // this.createCalendar();
+        this.entries.header.appendChild(this.childrens.searchComponent.el)
     }
 
     createCalendar() {
-        const month = 10;
+        const month = 11;
         const year = 2019;
 
         const {days, startDate} = this.getCalendarOptions(month, year);
-        const notes = getNotesByMonth(month, year);
+        // const notes = getNotesByMonth(month, year);
 
-        const dayTemplate = this.getEntityTemplate('calendarDay');
-        this.calendar.innerHTML = '';
+        removeChilds(this.calendar);
 
         let week;
         let weekIndex = 0;
@@ -52,29 +54,27 @@ export class App extends Spider {
             if (i % 7 === 0) {
                 weekIndex++;
                 week && this.calendar.appendChild(week);
-                week = document.createElement('div');
-                week.classList.add('calendar__week');
+                week = getNodeByString(`<div class="calendar__week"></div>`)
             }
             const note = notes.find(({date: d}) => daysEqual(new Date(d * 1000), date));
 
-            let filledTemplate = Renderer.getFilledTemplate(dayTemplate, {
+
+            const day = calendarDayFC({
+                isActive: !!note,
                 date: (weekIndex === 1 && getWeekDayName(date) + ', ') + date.getDate(),
                 title: note && truncateText(note.title, 30) || '',
-                member: note && truncateText(note.member, 45) || '',
-                // desc: note && note.desc || '',
+                member: note && truncateText(note.member, 45) || ''
             });
-            if (note) {
-                const c = 'calendar__day';
-                filledTemplate = filledTemplate.replace(c, `${c} ${c}-active`);
-            }
-            week.innerHTML += filledTemplate;
+
+            week.appendChild(day);
         }
     }
 
     bindEvents() {
-        this.calendar.addEventListener('click', (Event) => {
-            console.log(Event.target.closest('[data-entity="calendarDay"]'))
-        });
+        this.entries.addFastEvent.addEventListener('click', this.onAddFastEvent.bind(this));
+        this.entries.navigationPrev.addEventListener('click', this.onNavigationClick.bind(this, false));
+        this.entries.navigationNext.addEventListener('click', this.onNavigationClick.bind(this, true));
+        this.entries.navigationToday.addEventListener('click', this.onNavigationToday.bind(this));
     }
 
     /**
@@ -97,5 +97,55 @@ export class App extends Spider {
             startDate: new Date(startDate.getTime())
         };
     }
+
+    /**
+     * Get links to node bindings.
+     */
+    getEntries() {
+        this.entries = {};
+        document
+            .querySelectorAll('[data-id]')
+            .forEach((el) => this.entries[el.dataset.id] = el);
+    }
+
+    renderDate() {
+        const d = new Date(this.selectedDate);
+        const month = getMonthName(d);
+        this.entries.navigationDate.innerText = `${month} ${d.getFullYear()}`
+    }
+
+    // Event handlers
+    /**
+     * @param {MouseEvent} e
+     */
+    onAddFastEvent(e) {
+        const el = this.entries.addFastEvent;
+        const {left, bottom} = el.getBoundingClientRect();
+        const popup = this.childrens.fastEvent.el;
+        popup.style.left = `${left}px`;
+        popup.style.top = `${bottom + 15}px`;
+
+        this.rootNode.appendChild(popup);
+    }
+
+    /**
+     * @param {boolean} toIncrement
+     * @param {MouseEvent} e
+     */
+    onNavigationClick(toIncrement, e) {
+        var d = new Date(this.selectedDate);
+        d.setMonth(d.getMonth() + (toIncrement ? 1 : -1));
+        this.selectedDate = d;
+        this.renderDate();
+    }
+
+    /**
+     * @param {MouseEvent} e
+     */
+    onNavigationToday(e) {
+        this.selectedDate = (new Date()).setDate(1);
+        this.renderDate();
+    }
+
 }
 
