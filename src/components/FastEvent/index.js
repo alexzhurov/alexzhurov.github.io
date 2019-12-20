@@ -19,7 +19,7 @@ export class FastEvent extends Control {
      * @param {Event} e
      */
     create(e) {
-        e.preventDefault();
+        e.stopPropagation();
     }
 
     decodeMessage() {
@@ -40,7 +40,7 @@ export class FastEvent extends Control {
      * @param {Event} e
      */
     close(e) {
-        e.preventDefault();
+        e.stopPropagation();
 
         this.el.remove();
     }
@@ -50,7 +50,7 @@ export class FastEvent extends Control {
      * @param{InputEvent} e
      */
     input(e) {
-        e.preventDefault();
+        e.stopPropagation();
 
         this.state = {
             ...this.state,
@@ -64,7 +64,7 @@ export class FastEvent extends Control {
      */
     keydown(e) {
         if (e.key === 'Enter') {
-            e.preventDefault();
+            e.stopPropagation();
             this.close();
         }
     }

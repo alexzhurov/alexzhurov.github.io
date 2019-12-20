@@ -29,7 +29,7 @@ export class SearchComponent extends Control {
      */
     keydown(e) {
         if (e.key === 'Enter') {
-            e.preventDefault();
+            e.stopPropagation();
             this.state.isActive = false;
             this._forceUpdate();
         }
@@ -39,7 +39,7 @@ export class SearchComponent extends Control {
      * @param {InputEvent} e
      */
     onsearch(e) {
-        e.preventDefault();
+        e.stopPropagation();
         this.state = {
             ...this.state,
             searchStr: e.target.value
@@ -50,7 +50,7 @@ export class SearchComponent extends Control {
     }
 
     click(e) {
-        e.preventDefault();
+        e.stopPropagation();
         const item = e.target.closest('.search__item');
         const selectedDate = item.dataset.date;
     }
