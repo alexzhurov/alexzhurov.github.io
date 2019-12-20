@@ -9,14 +9,19 @@
 /**
  * @type {calendarDay[]}
  */
-import dates          from '../../mock';
-import StorageManager from '../StorageManager';
+import dates                     from '../../mock';
+import StorageManager            from '../StorageManager';
+import { daysEqual }             from "../utils/daysEqual";
+import EventBus                 from '../EventBus';
+import { CALENDAR_DATE_CHANGE } from '../Constants/Events';
+
 
 const St = {
     state: {
         notes: [],
         selectedNotes: [],
-        searchedNotes: []
+        searchedNotes: [],
+        selectedDate: null
     },
     actions: {
         init() {
@@ -54,6 +59,16 @@ const St = {
         },
 
         /**
+         * Найти существующую запись
+         * @param {Date} date
+         * @return {calendarDay|null}
+         */
+        getNoteByDate(date) {
+            const result = this.state.selectedNotes.find(({date: d}) => daysEqual(new Date(d * 1000), date));
+            return result ? {...result} : null
+        },
+
+        /**
          * @param {string} str
          */
         getNotesByString(str) {
@@ -63,6 +78,15 @@ const St = {
                 const notes = [...this.state.notes];
                 this.state.searchedNotes = notes.filter(({title}) => title.toLowerCase().includes(str.toLowerCase()));
             }
+        },
+
+        /**
+         * @param {Date} date
+         */
+        setDate(date) {
+            this.state.selectedDate = date;
+            this.bus.notify(CALENDAR_DATE_CHANGE);
+
         }
     }
 };
@@ -82,6 +106,7 @@ export default new class Store {
             })(this, act, actions)
         }
         this.actions.init();
+        this.bus = EventBus;
     }
 
     /**
