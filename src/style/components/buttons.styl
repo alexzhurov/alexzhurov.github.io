@@ -1,8 +1,13 @@
 .btn {
   padding: 7px 10px
   border-radius: 2px
-  transition: background-color .2s
   cursor: pointer;
+
+  &:hover,
+  &:active,
+  &:focus {
+    transition: background-color .2s
+  }
 }
 
 .btn-sm {
@@ -10,7 +15,7 @@
   cursor: pointer;
   padding-left: 6px;
   padding-right: 6px;
-  border: 1px solid rgba(grayAccent,.4);
+  border: 1px solid rgba(grayAccent, .4);
   font-size: 12px
 }
 
@@ -19,6 +24,7 @@
   background-color: blueDark
   color: whiteBase
 
+  &:hover,
   &:active,
   &:focus {
     background-color: blueDarkAccent

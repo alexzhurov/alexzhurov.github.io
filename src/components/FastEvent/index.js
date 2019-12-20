@@ -1,5 +1,7 @@
 import { Control }        from '../../modules/Control';
 import { getMonthNumber } from '../../modules/utils/getMonthNumber';
+import EventBus           from '../../modules/EventBus';
+
 
 export class FastEvent extends Control {
     constructor(o) {
@@ -8,6 +10,7 @@ export class FastEvent extends Control {
             message: '',
             date: null
         };
+        this.bus = EventBus;
 
         this.close = this.close.bind(this);
         this.create = this.create.bind(this);
@@ -25,10 +28,11 @@ export class FastEvent extends Control {
     decodeMessage() {
         let [fullDate, time, ...message] = this.state.message.split(',');
         time = time.trim();
+        // TODO (au.zhurov): fixe usage of time variable
         message = message.join(',').trim();
         fullDate = fullDate.trim();
 
-        let [date, month, year = (new Date()).getFullYear()] = fullDate.split(' ');
+        let [date, month, year = (new Date).getFullYear()] = fullDate.split(' ');
         year = Number(year);
         date = Number(date);
         month = getMonthNumber(month);
@@ -79,7 +83,7 @@ export class FastEvent extends Control {
            value="${this.state && this.state.message}"
            >
     <button onclick="create" class="btn-sm fastEvent__submit">Создать</button>
-    <div onclick="close" class="close">&times;</div>
+    <div onclick="close" class="modalClose">&times;</div>
 </div>
 `);
     }

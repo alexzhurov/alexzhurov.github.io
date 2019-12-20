@@ -1,0 +1,59 @@
+.modal {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  width: 305px
+  height: 330px
+  padding: 25px 25px 25px 20px
+  position: absolute;
+  box-sizing: border-box;
+  border-radius: 2px
+
+  &-tl::before {
+    triangle()
+    top: 30px
+  }
+
+  &-bl::before {
+    triangle()
+    top: auto;
+    bottom: 30px
+  }
+
+  &-tr::before {
+    triangle()
+    transform: rotate(-135deg);
+    left: -5px;
+  }
+
+  &-br::before {
+    triangle()
+    transform: rotate(45deg);
+    left: auto;
+    right: -5px
+  }
+
+  .modal__input {
+    margin-bottom: 6px
+  }
+
+  .modal__area {
+    resize: none;
+    display: flex;
+    width: 100%
+    box-sizing: border-box;
+    min-height: 115px
+    padding: 3px 0;
+    padding-left: 5px;
+    margin-bottom: 22px
+  }
+}
+
+.modalClose {
+  position: absolute;
+  top: 3px
+  right: 7px
+  left: auto;
+  color: grayAccent;
+  cursor: pointer;
+}
+

@@ -1,20 +1,30 @@
 /**
- * @param {boolean} isActive
- * @param {string} date
- * @param {string} title
- * @param {string} member
+ * @param {Object} data - An object.
+ * @param {Date} data.key
+ * @param {boolean} data.isActive - Has Active note in the day.
+ * @param {string} data.date
+ * @param {string} data.title
+ * @param {string} data.member
  * @return {string}
  */
-export const calendarDayFC = (isActive = false, date, title, member) => {
-    return (`
-<div class="calendar__day day-item"
-     data-entity="calendarDay">
-    <div class="day-item__date">${date}</div>` +
-        (isActive ? `<div class="day-item__title">${title}/div>
-    <div class="day-item__member"> ${member}/div>` : '') +
-        `</div>`
-    )
-};
-
-
+export const calendarDayFC =
+    ({
+         key = null,
+         isActive = false,
+         date = '',
+         title = '',
+         member = ''
+     }) => {
+        !key && console.warn(`В компонент calendarDayFC - не передан key=${key}`);
+        key = Number(key);
+        return (`
+<div class="calendar__day ${(isActive ? 'calendar__day-active' : '')} day-item"
+data-key="${key}" onclick="onClick">
+<div class="day-item__date">${date}</div>
+${isActive ? `
+    <div class="day-item__title">${title}</div>
+    <div class="day-item__member">${member}</div>` : ' '
+        }
+</div>`);
+    }
 
