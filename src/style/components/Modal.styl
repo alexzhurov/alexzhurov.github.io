@@ -1,3 +1,14 @@
+right-corner() {
+  transform: rotate(-135deg);
+  left: -5px
+}
+
+left-corner() {
+  transform: rotate(45deg);
+  left: auto;
+  right: -5px
+}
+
 .modal {
   background-color: #fff;
   border: 1px solid #ccc;
@@ -8,28 +19,27 @@
   box-sizing: border-box;
   border-radius: 2px
 
-  &-tl::before {
-    triangle()
-    top: 30px
+
+  &.right-top::before {
+    triangle();
+    right-corner()
   }
 
-  &-bl::before {
-    triangle()
-    top: auto;
+  &.right-bottom::before {
+    triangle();
+    right-corner()
     bottom: 30px
   }
 
-  &-tr::before {
-    triangle()
-    transform: rotate(-135deg);
-    left: -5px;
+  &.left-top::before {
+    triangle();
+    left-corner();
   }
 
-  &-br::before {
+  &.left-bottom::before {
     triangle()
-    transform: rotate(45deg);
-    left: auto;
-    right: -5px
+    left-corner();
+    bottom: 30px
   }
 
   .modal__input {
