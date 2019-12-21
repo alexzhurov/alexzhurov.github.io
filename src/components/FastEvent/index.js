@@ -1,6 +1,7 @@
 import { Control }        from '../../modules/Control';
 import { getMonthNumber } from '../../modules/utils/getMonthNumber';
 import EventBus           from '../../modules/EventBus';
+import Store              from '../../modules/Store';
 
 
 export class FastEvent extends Control {
@@ -15,6 +16,7 @@ export class FastEvent extends Control {
         this.close = this.close.bind(this);
         this.create = this.create.bind(this);
         this.input = this.input.bind(this);
+        this.keydown = this.keydown.bind(this);
         this.createEl();
     }
 
@@ -22,29 +24,48 @@ export class FastEvent extends Control {
      * @param {Event} e
      */
     create(e) {
-        e.stopPropagation();
+        e && e.stopPropagation();
+        const note = this.decodeMessage();
+        Store.actions.saveNote(note);
     }
 
+    /**
+     * @return {calendarDayParsed}
+     */
     decodeMessage() {
-        let [fullDate, time, ...message] = this.state.message.split(',');
-        time = time.trim();
-        // TODO (au.zhurov): fixe usage of time variable
-        message = message.join(',').trim();
-        fullDate = fullDate.trim();
+        const defaultYear = new Date(Store.state.selectedDate).getFullYear();
 
-        let [date, month, year = (new Date).getFullYear()] = fullDate.split(' ');
-        year = Number(year);
-        date = Number(date);
-        month = getMonthNumber(month);
-        year = year > 100 ? year : year + 2000;
-        console.log(message, '=', new Date(year, month, date));
+
+        let [fullDate, desc, ...msg] = this.state.message.split(',').map((s) => s.trim());
+        const title = msg.join(', ').trim();
+        let [date, month, year = defaultYear] = fullDate
+            .trim()
+            .split(' ')
+            .map((s, i) => i === 1 ? getMonthNumber(s) : Number(s));
+        year = ((year) => {
+            switch (true) {
+                case year < 50:
+                    return year += 2000;
+                case year < 100:
+                    return year += 1900;
+                default:
+                    return year
+            }
+        })(year);
+
+        return {
+            date: new Date(year, month, date),
+            desc,
+            title,
+            member: ''
+        };
     }
 
     /**
      * @param {Event} e
      */
-    close(e) {
-        e.stopPropagation();
+    close(e = null) {
+        e && e.stopPropagation();
 
         this.el.remove();
     }
@@ -54,7 +75,7 @@ export class FastEvent extends Control {
      * @param{InputEvent} e
      */
     input(e) {
-        e.stopPropagation();
+        e && e.stopPropagation();
 
         this.state = {
             ...this.state,
