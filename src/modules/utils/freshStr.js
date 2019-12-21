@@ -3,4 +3,4 @@
  * @param str
  * @return {string}
  */
-export const freshStr = (str) => str.replace(/[^\w\s]/gi, '');
+export const freshStr = (str) => str.replace(/[^\w\sа-я.,!?()]/gi, '');
