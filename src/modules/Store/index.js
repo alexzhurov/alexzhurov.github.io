@@ -1,17 +1,26 @@
+import { delayFn }              from '../utils/delayFn';
+
 /**
  * @typedef calendarDay
  * @param {string} title
- * @param {number} date
+ * @param {number} date - key value Date / 1000
  * @param {string} member
  * @param {string} desc
+ */
+/**
+ * @typedef {Object} calendarDayParsed - An object.
+ * @property {Date}  date
+ * @property {string}  title
+ * @property {string}  member
+ * @property {string}  desc
  */
 
 /**
  * @type {calendarDay[]}
  */
-import dates                     from '../../mock';
-import StorageManager            from '../StorageManager';
-import { daysEqual }             from "../utils/daysEqual";
+import dates                    from '../../mock';
+import StorageManager           from '../StorageManager';
+import { daysEqual }            from "../utils/daysEqual";
 import EventBus                 from '../EventBus';
 import { CALENDAR_DATE_CHANGE } from '../Constants/Events';
 
@@ -30,12 +39,9 @@ const St = {
                 this.state = prevStore;
             } else {
                 this.actions.getNotes();
+                this.state.selectedDate = new Date();
             }
         },
-        /*
-        addNote
-        removeNote
-         */
         getNotes() {
             this.state.notes = [...dates].sort((a, b) => {
                 if (a.date < b.date) return -1;
@@ -86,16 +92,46 @@ const St = {
         setDate(date) {
             this.state.selectedDate = date;
             this.bus.notify(CALENDAR_DATE_CHANGE);
+        },
 
+        /**
+         * @param {calendarDayParsed} day
+         */
+        saveNote(day) {
+            if (!(day.date instanceof Date)) {
+                throw new Error('Тип аргумента даты не верный')
+            }
+            const exist = this.actions.getNoteByDate((day.date));
+            const normalized = {
+                ...day,
+                date: Number(day.date) / 1000
+            };
+            if (exist) {
+                this.actions.removeNote(normalized.date);
+            }
+            this.state.notes.push(normalized)
+        },
+
+        /**
+         * @param{number} dateNormalized - Date / 1000
+         */
+        removeNote(dateNormalized) {
+            const resetTime = (date) => ((new Date(date * 1000)).setHours(0, 0, 0, 0) / 1000);
+            this.state.notes = this.state.notes.filter((note) => resetTime(note.date) !== dateNormalized);
         }
     }
 };
 
 
-export default new class Store {
+/**
+ * Singleton of store
+ */
+const Store = new class StoreCreator {
     constructor() {
         const {state, actions} = St;
         this.state = state;
+        this.actions = actions;
+
         this.actions = {};
         for (const act in actions) {
             this.actions[act] = (() => (...arg) => {
@@ -110,9 +146,13 @@ export default new class Store {
     }
 
     /**
-     * Save to localstorage on each action
+     * Save to localstorage on each action with delay
      */
     syncStore() {
-        StorageManager.saveState(this.state);
+        delayFn(() => {
+            StorageManager.saveState(this.state)
+        }, 200)
     }
-}
+};
+
+export default Store
