@@ -19,6 +19,7 @@ export const calendarDayFC =
         key = Number(key);
         return (`
 <div class="calendar__day ${(isActive ? 'calendar__day-active' : '')} day-item"
+data-exist="${isActive}"
 data-key="${key}" onclick="onClick">
 <div class="day-item__date">${date}</div>
 ${isActive ? `
