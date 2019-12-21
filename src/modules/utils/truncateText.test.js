@@ -1,4 +1,4 @@
-import {truncateText} from './truncateText';
+import { truncateText } from './truncateText';
 
 test("truncateText('abv') returns abv", () => {
     expect(truncateText('abv')).toBe('abv');
@@ -19,6 +19,6 @@ test.each([
     ['aabbccdd', 'aabb...'],
     ['aabbccddee', 'aabb...'],
 ])('truncateText(%p, 4) returns %p', (a, expected) => {
-    expect(truncateText(a,4)).toBe(expected);
+    expect(truncateText(a, 4)).toBe(expected);
 });
 

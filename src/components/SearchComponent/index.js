@@ -45,7 +45,7 @@ export class SearchComponent extends Control {
             searchStr: e.target.value
         };
         delayFn(() => {
-                this.state.isActive = this.state.searchStr !== '';
+            this.state.isActive = this.state.searchStr !== '';
             this.renderSearch();
         }, 800)
     }
@@ -96,7 +96,7 @@ export class SearchComponent extends Control {
         }).join('');
         const emptyList = `<div class="search__item item-search">
                         <div class="item-search__title">Совпадений не найдеено</div>
-                    </div>`
+                    </div>`;
 
         return (`
 <div class="header__search">

@@ -1,5 +1,3 @@
-import { delayFn }              from '../utils/delayFn';
-
 /**
  * @typedef calendarDay
  * @param {string} title
@@ -18,9 +16,10 @@ import { delayFn }              from '../utils/delayFn';
 /**
  * @type {calendarDay[]}
  */
-import dates                    from '../../mock';
-import StorageManager           from '../StorageManager';
-import { daysEqual }            from "../utils/daysEqual";
+import dates                                           from '../../mock';
+import StorageManager                                  from '../StorageManager';
+import { daysEqual }                                   from "../utils/daysEqual";
+import { delayFn }                                     from '../utils/delayFn';
 import EventBus                                        from '../EventBus';
 import { CALENDAR_DATE_CHANGE, CALENDAR_NOTE_CHANGED } from '../Constants/Events';
 
