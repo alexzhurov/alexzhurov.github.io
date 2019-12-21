@@ -49,17 +49,12 @@ export class Modal extends Control {
     }
 
     open(e) {
-
-        this.state.
-
-
-
-
         const {el, key} = e.detail;
         // const date = new Date(Number(el.dataset.key));
         /*
         сделать проверку на переоткрытие окна
          */
+        this._forceUpdate();
         this.addPosition(el);
         this.roootEl.appendChild(this.el);
     }
@@ -95,7 +90,7 @@ export class Modal extends Control {
         }
         const {floor, abs} = Math;
         this.el.style.left = `${abs(floor(result.left))}px`;
-        this.el.style.top = `${floor(result.top)}px`;
+        this.el.style.top = `${abs(floor(result.top))}px`;
         this.el.classList.add(result.class);
     }
 
@@ -117,16 +112,16 @@ export class Modal extends Control {
     render() {
         return (`
 <div class="modal">
-    <input type="text" class="input modal__input" placeholder="Событие">
-    <input type="text" class="input modal__input" placeholder="День, месяц, год">
-    <input type="text" class="input modal__input" placeholder="Имена участников"
+    <input type="text" class="input modal__input" tabindex="20" placeholder="Событие">
+    <input type="text" class="input modal__input" tabindex="20" placeholder="День, месяц, год">
+    <input type="text" class="input modal__input" tabindex="20" placeholder="Имена участников"
            style="margin-bottom: 38px">
-    <textarea class="modal__area"
+    <textarea class="modal__area" tabindex="20"
               placeholder="Описание"
     ></textarea>
-    <button onclick="onSubmit" class="btn-sm" style="margin-right: 11px;">Готово</button>
-    <button onclick="onRemove" class="btn-sm">Удалить</button>
-    <div onclick="onClose" class="modalClose">&times;</div>
+    <button onclick="onSubmit" class="btn-sm" tabindex="20" style="margin-right: 11px;">Готово</button>
+    <button onclick="onRemove" class="btn-sm" tabindex="20">Удалить</button>
+    <div onclick="onClose" class="modalClose" tabindex="20" role="button">&times;</div>
 </div>
 `);
     }

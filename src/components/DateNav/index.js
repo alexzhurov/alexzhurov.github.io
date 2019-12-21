@@ -47,10 +47,10 @@ export class DateNav extends Control {
         };
         return (`
             <nav class="navigation">
-                <button onclick="nav" data-nav="prev" class="navigation__prev"></button>
+                <button onclick="nav" tabindex="1" data-nav="prev" class="navigation__prev"></button>
                 <div class="navigation__date">${dateText()}</div>
-                <button onclick="nav" data-nav="next" class="navigation__next"></button>
-                <div onclick="nav" data-nav="today" class="navigation__today">Сегодня</div>
+                <button onclick="nav" tabindex="1" data-nav="next" class="navigation__next"></button>
+                <div onclick="nav" tabindex="1" data-nav="today" class="navigation__today">Сегодня</div>
             </nav>
 `);
     }
