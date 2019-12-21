@@ -23,8 +23,7 @@ export class Calendar extends Control {
         };
         this.createEl();
         this.setBinds();
-        const d = new Date(Store.state.selectedDate);
-        this.createCalendar(d.getMonth(), d.getFullYear());
+        this.calendarDateChangeHandler();
     }
 
     setBinds() {

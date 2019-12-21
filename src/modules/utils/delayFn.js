@@ -9,11 +9,5 @@ import Delayer from './Delayer';
  *
  */
 export function delayFn(callback, delay) {
-    // console.log("delaFn.js => getMonthName => callback: ", callback);
-    // console.log("delaFn.js => getMonthName => time: ", delay);
-    /*
-    глобальный обьект
-    класс синглтон для каждого события
-     */
     Delayer.addStack(callback, delay);
 }

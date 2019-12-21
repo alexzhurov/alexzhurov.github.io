@@ -1,4 +1,4 @@
-import { eachChild, getNodeByString, setHandler, removeChilds } from "../domUtils";
+import { eachChild, getNodeByString, removeChilds, setHandler } from "../domUtils";
 
 export class Control {
     constructor(rootEl) {
