@@ -21,8 +21,8 @@ import { delayFn }              from '../utils/delayFn';
 import dates                    from '../../mock';
 import StorageManager           from '../StorageManager';
 import { daysEqual }            from "../utils/daysEqual";
-import EventBus                 from '../EventBus';
-import { CALENDAR_DATE_CHANGE } from '../Constants/Events';
+import EventBus                                        from '../EventBus';
+import { CALENDAR_DATE_CHANGE, CALENDAR_NOTE_CHANGED } from '../Constants/Events';
 
 
 const St = {
@@ -78,11 +78,11 @@ const St = {
          * @param {string} str
          */
         getNotesByString(str) {
-            if (!str) {
-                this.state.searchedNotes = []
-            } else {
+            if (str) {
                 const notes = [...this.state.notes];
                 this.state.searchedNotes = notes.filter(({title}) => title.toLowerCase().includes(str.toLowerCase()));
+            } else {
+                this.state.searchedNotes = []
             }
         },
 
@@ -109,7 +109,8 @@ const St = {
             if (exist) {
                 this.actions.removeNote(normalized.date);
             }
-            this.state.notes.push(normalized)
+            this.state.notes.push(normalized);
+            this.bus.notify(CALENDAR_NOTE_CHANGED);
         },
 
         /**
@@ -118,6 +119,7 @@ const St = {
         removeNote(dateNormalized) {
             const resetTime = (date) => ((new Date(date * 1000)).setHours(0, 0, 0, 0) / 1000);
             this.state.notes = this.state.notes.filter((note) => resetTime(note.date) !== dateNormalized);
+            this.bus.notify(CALENDAR_NOTE_CHANGED);
         }
     }
 };

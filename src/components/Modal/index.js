@@ -3,6 +3,7 @@ import EventBus              from "../../modules/EventBus";
 import { CALENDAR_DAY_OPEN } from "../../modules/Constants/Events";
 import Store                 from "../../modules/Store";
 import { getFullDate }       from "../../modules/utils/getFullDate";
+import { daysEqual }         from "../../modules/utils/daysEqual";
 
 
 /**
@@ -65,7 +66,7 @@ export class Modal extends Control {
             this.state.key = key;
             this.state.isExist = el.dataset.exist === 'true';
             if (this.state.isExist) {
-                const date = new Date(Number(key));
+                const date = new Date(Number(key * 1000));
                 const note = Store.actions.getNoteByDate(date);
                 const d = new Date(note.date * 1000);
                 this.state = {
@@ -122,7 +123,7 @@ export class Modal extends Control {
 
     onRemove(e) {
         e && e.stopPropagation();
-        const dateNormalized = Number(this.state.key / 1000);
+        const dateNormalized = Number(this.state.key);
         Store.actions.removeNote(dateNormalized);
         this.onClose();
     }
@@ -131,8 +132,15 @@ export class Modal extends Control {
         e && e.stopPropagation();
         const {date: d, title, member, desc} = this.state;
         const date = getFullDate(d);
+        const key = Number(this.state.key);
+        const keyDate = new Date(key);
 
-        Store.actions.saveNote({date, title, member, desc,});
+        if (daysEqual(date, keyDate)) {
+            Store.actions.saveNote({date, title, member, desc,});
+        } else {
+            Store.actions.removeNote(key);
+            Store.actions.saveNote({date, title, member, desc,});
+        }
         this.onClose();
     }
 

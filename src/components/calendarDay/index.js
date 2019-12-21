@@ -16,7 +16,7 @@ export const calendarDayFC =
          member = ''
      }) => {
         !key && console.warn(`В компонент calendarDayFC - не передан key=${key}`);
-        key = Number(key);
+        key = Number(key) / 1000;
         return (`
 <div class="calendar__day ${(isActive ? 'calendar__day-active' : '')} day-item"
 data-exist="${isActive}"

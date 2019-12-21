@@ -1,11 +1,11 @@
-import { Control }                                 from '../../modules/Control';
-import Store                                       from "../../modules/Store";
-import { CALENDAR_DATE_CHANGE, CALENDAR_DAY_OPEN } from "../../modules/Constants/Events";
-import { getWeekDayName }                          from "../../modules/utils/getWeekDayName";
-import { truncateText }                            from "../../modules/utils/truncateText";
-import { freshStr }                                from "../../modules/utils/freshStr";
-import EventBus                                    from '../../modules/EventBus';
-import { calendarDayFC }                           from "../calendarDay";
+import { Control }                                                        from '../../modules/Control';
+import Store                                                              from "../../modules/Store";
+import { CALENDAR_DATE_CHANGE, CALENDAR_DAY_OPEN, CALENDAR_NOTE_CHANGED } from "../../modules/Constants/Events";
+import { getWeekDayName }                                                 from "../../modules/utils/getWeekDayName";
+import { truncateText }                                                   from "../../modules/utils/truncateText";
+import { freshStr }                                                       from "../../modules/utils/freshStr";
+import EventBus                                                           from '../../modules/EventBus';
+import { calendarDayFC }                                                  from "../calendarDay";
 
 export class Calendar extends Control {
     constructor(o) {
@@ -27,10 +27,12 @@ export class Calendar extends Control {
     }
 
     setBinds() {
+        this._forceUpdate = this._forceUpdate.bind(this);
         this.onClick = this.onClick.bind(this);
         this.calendarDateChangeHandler = this.calendarDateChangeHandler.bind(this);
         this.bus = EventBus;
         this.bus.subscribe(CALENDAR_DATE_CHANGE, this.calendarDateChangeHandler);
+        this.bus.subscribe(CALENDAR_NOTE_CHANGED, this.calendarDateChangeHandler);
     }
 
 

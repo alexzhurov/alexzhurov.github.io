@@ -1,20 +1,20 @@
-import { Control }      from '../../modules/Control';
-import Store            from "../../modules/Store";
-import { getMonthName } from '../../modules/utils/getMonthName';
-import EventBus         from "../../modules/EventBus";
+import { Control }              from '../../modules/Control';
+import Store                    from "../../modules/Store";
+import { getMonthName }         from '../../modules/utils/getMonthName';
+import EventBus                 from "../../modules/EventBus";
+import { CALENDAR_DATE_CHANGE } from "../../modules/Constants/Events";
 
 /**
  * @property {Object} state - state of the component
- * @property {Date} state.date - Выбранная дата
  */
 export class DateNav extends Control {
     constructor(o) {
         super(o);
-        this.state = {
-            date: (new Date(Store.state.selectedDate))
-        };
+        this.state = {};
         this.bus = EventBus;
         this.nav = this.nav.bind(this);
+        this._forceUpdate = this._forceUpdate.bind(this);
+        this.bus.subscribe(CALENDAR_DATE_CHANGE, this._forceUpdate);
         this.createEl();
     }
 
@@ -22,8 +22,8 @@ export class DateNav extends Control {
         e.stopPropagation();
         const {nav} = e.target.dataset;
 
-        let date = (() => {
-            const d = new Date(this.state.date);
+        const date = (() => {
+            const d = new Date(Store.state.selectedDate);
             switch (nav) {
                 case 'today':
                     return (new Date).setDate(1);
@@ -33,15 +33,12 @@ export class DateNav extends Control {
                     return d.setMonth(d.getMonth() + 1);
             }
         })();
-        date = new Date(date);
-        this.state.date = date;
         Store.actions.setDate(date);
-        this._forceUpdate();
     }
 
     render() {
         const dateText = () => {
-            const d = this.state.date;
+            const d = new Date(Store.state.selectedDate);
             const month = getMonthName(d);
             return `${month} ${d.getFullYear()}`;
         };

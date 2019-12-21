@@ -15,7 +15,7 @@ export default new class StorageManager {
         try {
             const serializedState = JSON.stringify(state);
             localStorage.setItem('state', serializedState);
-        } catch {
+        } catch (e) {
             // ignore write errors
         }
     }
