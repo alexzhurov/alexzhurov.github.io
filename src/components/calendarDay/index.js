@@ -16,16 +16,16 @@ export const calendarDayFC =
          member = ''
      }) => {
         !key && console.warn(`В компонент calendarDayFC - не передан key=${key}`);
-        key = Number(key) / 1000;
+        const keyNum = Number(key) / 1000;
         return (`
 <div class="calendar__day ${(isActive ? 'calendar__day-active' : '')} day-item"
 data-exist="${isActive}"
-data-key="${key}" onclick="onClick">
+data-key="${keyNum}" onclick="onClick">
 <div class="day-item__date">${date}</div>
 ${isActive ? `
     <div class="day-item__title">${title}</div>
     <div class="day-item__member">${member}</div>` : ' '
         }
 </div>`);
-    }
+    };
 

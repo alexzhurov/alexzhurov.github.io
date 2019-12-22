@@ -8,8 +8,8 @@ import { Modal }           from './components/Modal';
 
 
 /**
- * @property {Object.<string, HTMLElement>} entries
- * @property {Object.<string, Class>} childrens
+ * @property {Object.<string, Element>} entries
+ * @property {Object.<string, Class>} children
  * @property {HTMLElement} calendar - element of the calendar container
  */
 export class App extends Spider {
@@ -22,7 +22,7 @@ export class App extends Spider {
 
     beforeMount() {
         this.getEntries();
-        this.childrens = {
+        this.children = {
             fastEvent: new FastEvent(),
             searchComponent: new SearchComponent(this.entries.header),
             dateNav: new DateNav(this.entries.dateNav),
@@ -30,9 +30,9 @@ export class App extends Spider {
             modal: new Modal(this.rootNode)
         };
         this.bindEvents();
-        this.entries.header.appendChild(this.childrens.searchComponent.el);
-        this.entries.dateNav.appendChild(this.childrens.dateNav.el);
-        this.entries.calendar.appendChild(this.childrens.calendar.el);
+        this.entries.header.appendChild(this.children.searchComponent.el);
+        this.entries.dateNav.appendChild(this.children.dateNav.el);
+        this.entries.calendar.appendChild(this.children.calendar.el);
     }
 
 
@@ -56,9 +56,10 @@ export class App extends Spider {
      * @param {MouseEvent} e
      */
     onAddFastEvent(e) {
+        e && e.stopPropagation();
         const el = this.entries.addFastEvent;
         const {left, bottom} = el.getBoundingClientRect();
-        const popup = this.childrens.fastEvent.el;
+        const popup = this.children.fastEvent.el;
         popup.style.left = `${left}px`;
         popup.style.top = `${bottom + 15}px`;
 

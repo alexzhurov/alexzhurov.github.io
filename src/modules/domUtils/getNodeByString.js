@@ -1,7 +1,7 @@
 /**
  * Get html elements from string
  * @param {string} str - html element as a string
- * @return {HTMLElement}
+ * @return {Element}
  */
 export const getNodeByString = (str) => {
     const tmp = document.createElement('div');

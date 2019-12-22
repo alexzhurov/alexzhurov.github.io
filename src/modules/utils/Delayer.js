@@ -15,7 +15,7 @@ export default new class Delayer {
     }
 
     /**
-     * Reterns positive hashcode from string
+     * Returns positive hashcode from string
      * @param {string} s
      * @return {number}
      */

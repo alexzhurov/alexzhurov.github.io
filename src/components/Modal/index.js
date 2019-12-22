@@ -9,12 +9,12 @@ import { daysEqual }         from "../../modules/utils/daysEqual";
 /**
  * @typedef  ModalState
  * @type {Object}
- * @property {string} key
+ * @property {string|null} key
  * @property {boolean} isExist
  * @property {number} elWidth
  * @property {number} elHeight
  * @property {string} title - title of the note
- * @property {Date} date - Data of the note
+ * @property {string} date - Data of the note
  * @property {string} member - Members of the note
  * @property {string} desc - Description of the note
  */
@@ -148,10 +148,9 @@ export class Modal extends Control {
      * @param {InputEvent} e
      */
     onInput(e) {
-        e & e.stopPropagation();
-        const state = e.target.dataset.state;
-        const val = e.target.value;
-        this.state[state] = val
+        e && e.stopPropagation();
+        const {value, dataset: {state}} = e.target;
+        this.state[state] = value
     }
 
     render() {

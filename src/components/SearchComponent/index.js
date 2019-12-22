@@ -50,8 +50,11 @@ export class SearchComponent extends Control {
         }, 800)
     }
 
+    /**
+     * @param {MouseEvent} e
+     */
     onInputClick(e) {
-        // debugger;
+        e && e.stopPropagation();
         if (this.state.searchStr !== '') {
             this.state.isActive = true;
             this.renderSearch();

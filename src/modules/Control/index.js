@@ -1,4 +1,4 @@
-import { eachChild, getNodeByString, removeChilds, setHandler } from "../domUtils";
+import { eachChild, getNodeByString, removeChildren, setHandler } from "../domUtils";
 
 export class Control {
     constructor(rootEl) {
@@ -8,7 +8,7 @@ export class Control {
 
     _forceUpdate() {
         if (this.el) {
-            removeChilds(this.el);
+            removeChildren(this.el);
             this.el.remove();
         }
         this.createEl();
