@@ -1,13 +1,14 @@
 const path = require('path');
 const poststylus = require('poststylus');
 const webpack = require('webpack');
+const distFile = 'bundle.js';
 
 module.exports = {
     mode: "development",
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js'
+        filename: distFile
     },
     devtool: 'eval-source-map',
     module: {
@@ -53,9 +54,10 @@ module.exports = {
         serveIndex: true,
         watchContentBase: true,
         quiet: true,
+        progress: true,
         hot: true,
         port: 9000,
         open: true,
-        filename: 'bundle.js',
+        filename: distFile
     }
 };
