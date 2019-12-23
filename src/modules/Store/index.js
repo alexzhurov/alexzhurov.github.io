@@ -135,12 +135,11 @@ const Store = new class StoreCreator {
 
         this.actions = {};
         for (const act in actions) {
-            this.actions[act] = (() => (...arg) => {
-                const fn = actions[act].bind(this, ...arg);
-                const res = fn();
+            this.actions[act] = (...arg) => {
+                const r = actions[act].apply(this, arg);
                 this.syncStore();
-                return res;
-            })(this, act, actions)
+                return r;
+            }
         }
         this.actions.init();
         this.bus = EventBus;
